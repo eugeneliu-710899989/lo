@@ -1,5 +1,4 @@
-package http
-
+package httpclient
 import (
 	"bytes"
 	"encoding/json"
