@@ -13,7 +13,7 @@ func TestRandomString(t *testing.T) {
 	t.Parallel()
 	is := assert.New(t)
 
-	rand.Seed(time.Now().UnixNano())
+	rand.NewSource(time.Now().UnixNano())
 
 	str1 := RandomString(100, LowerCaseLettersCharset)
 	is.Equal(100, RuneLength(str1))

@@ -117,7 +117,7 @@ func TestDispatchingStrategyRandom(t *testing.T) {
 	is := assert.New(t)
 
 	// with this seed, the order of random channels are: 1 - 0
-	rand.Seed(14)
+	rand.NewSource(14)
 
 	children := createChannels[int](2, 2)
 	rochildren := channelsToReadOnly(children)

@@ -720,7 +720,7 @@ func TestSample(t *testing.T) {
 	t.Parallel()
 	is := assert.New(t)
 
-	rand.Seed(time.Now().UnixNano())
+	rand.NewSource(time.Now().UnixNano())
 
 	result1 := Sample([]string{"a", "b", "c"})
 	result2 := Sample([]string{})
@@ -746,7 +746,7 @@ func TestSamples(t *testing.T) {
 	t.Parallel()
 	is := assert.New(t)
 
-	rand.Seed(time.Now().UnixNano())
+	rand.NewSource(time.Now().UnixNano())
 
 	result1 := Samples([]string{"a", "b", "c"}, 3)
 	result2 := Samples([]string{}, 3)

@@ -65,7 +65,10 @@ func TestRequest(t *testing.T) {
 		for _, tt := range tests {
 			if r.URL.Path == tt.url && r.Method == tt.method {
 				w.WriteHeader(tt.statusCode)
-				w.Write([]byte(tt.responseBody))
+				_, err := w.Write([]byte(tt.responseBody))
+				if err != nil {
+					w.WriteHeader(http.StatusBadRequest)
+				}
 				return
 			}
 		}
