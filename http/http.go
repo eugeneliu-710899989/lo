@@ -51,6 +51,10 @@ func Request[T any](method, url string, data any, headers map[string]string) (re
 		return result, nil, fmt.Errorf("HTTP request failed with status code %d: %s", resp.StatusCode, respBody)
 	}
 
+	if resp.StatusCode == http.StatusNoContent {
+		return result, respBody, nil
+	}
+
 	err = json.Unmarshal(respBody, &result)
 	if err != nil {
 		return result, respBody, fmt.Errorf("decode response error %s", err.Error())
