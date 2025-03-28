@@ -1,10 +1,13 @@
 package httpclient
+
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
@@ -14,8 +17,12 @@ var JsonHeaders = map[string]string{
 	"Accept":       "application/json",
 }
 
-func Request[T any](method, url string, data any, headers map[string]string) (result T, respBody []byte, err error) {
-	var client = otelhttp.DefaultClient
+func Request[T any](ctx context.Context, method, url string, data any, headers map[string]string) (result T, respBody []byte, err error) {
+	transport := otelhttp.NewTransport(http.DefaultTransport)
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   time.Second * 30, // 30 second timeout
+	}
 	var body io.Reader
 	var jsonData []byte
 
@@ -27,7 +34,7 @@ func Request[T any](method, url string, data any, headers map[string]string) (re
 		body = bytes.NewBuffer(jsonData)
 	}
 
-	req, err := http.NewRequest(method, url, body)
+	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return result, nil, fmt.Errorf("create request error %s", err.Error())
 	}
